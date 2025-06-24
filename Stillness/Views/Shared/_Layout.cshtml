@@ -1,0 +1,91 @@
+﻿@inject IHttpContextAccessor Accessor
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Stillness</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Stillness.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        @{
+            var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+            var action = ViewContext.RouteData.Values["action"]?.ToString();
+            var isGallery = controller == "Pictures" && action == "Index";
+            string pfp = Accessor.HttpContext.Session.GetString("Pfp");
+        }
+        @if (isGallery || string.IsNullOrEmpty(pfp))
+        {
+            <nav class="navbar w-100 shadow-sm d-flex justify-content-center">
+                <div class="d-flex align-items-center gap-5">
+                    <a class="navbar-brand m-0" asp-area="" asp-controller="Pictures" asp-action="Create">Stillness</a>
+                    <div class="custom-search">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" class="search-icon" role="img" focusable="false">
+                            <g>
+                                <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                            </g>
+                        </svg>
+                        <form asp-action="Index" method="get" style="width:80vw">
+                        <input id="unique-search"
+                               class="custom-search-input"
+                               type="text"
+                               placeholder="Search..."
+                               name="pattern"
+                               aria-label="Search" />
+                        </form>
+                    </div>
+                    <a class="navbar-brand m-0" asp-area="" asp-controller="User" asp-action="Index">
+                        <img src="data:image/png;base64,@pfp" alt="" height="35px" class="rounded-circle" />
+                    </a>
+                </div>
+            </nav>
+        }
+        else
+        {
+            <nav class="navbar w-100 shadow-sm d-flex justify-content-center">
+                <div class="d-flex align-items-center gap-5">
+                    <a class="navbar-brand m-0" asp-area="" asp-controller="Pictures" asp-action="Index">Stillness</a>
+                    <ul class="navbar-nav flex-row gap-4 m-0" style="color:white">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Pictures" asp-action="Create">Post</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="Login">Sign in</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        }
+    </header>
+    <div class="container-fluid">   
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+<script>
+        window.addEventListener('scroll', function() {
+      const header = document.querySelector('header');
+      if(window.scrollY > 10) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+</script>
+</html>
+
+

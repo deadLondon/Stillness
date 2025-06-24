@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Stillness.Models.Pictures>
+
+
+<div class="row g-1 masonry-grid" data-masonry='{"percentPosition": true }'>
+    @foreach (var picture in Model)
+    {
+        <div class="col-lg-2 col-md-3 col-sm-4 mb-0">
+            <div class="shadow p-1">
+                <a asp-area="" asp-controller="Pictures" asp-action="Details" asp-route-id="@picture.Id">
+                <img src="~/@picture.Filepath"
+                     loading="lazy"
+                     style="width: 100%;; object-fit: cover;" 
+                     class="rounded"/>
+                 </a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const grid = document.querySelector('.masonry-grid');
+            imagesLoaded(grid, function () {
+                new Masonry(grid, {
+                    itemSelector: '.col-md-4, .col-lg-4, .col-sm-6',
+                    percentPosition: true
+                });
+            });
+        });
+    </script>
+}

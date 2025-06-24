@@ -1,0 +1,47 @@
+﻿@model Stillness.Models.UserPictureViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <hr />
+        <img src="data:image/png;base64,@Model.User.Avatar" alt="Avatar" height="150px" />
+        <h2>@Model.User.Nickname</h2>
+        <p>With us from : @Model.User.CreatedAt.ToString("d")</p>
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-12">
+        <hr />
+        <h3>Your images</h3>
+        <div class="row masonry-grid" data-masonry='{"percentPosition": true }'>
+            @foreach (var picture in Model.Pictures)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="shadow-sm">
+                        <img src="~/@picture.Filepath"
+                             loading="lazy"
+                             style="width: 100%; height: auto; object-fit: cover; display: block;" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const grid = document.querySelector('.masonry-grid');
+            imagesLoaded(grid, function () {
+                new Masonry(grid, {
+                    itemSelector: '.col-md-4, .col-lg-4, .col-sm-6',
+                    percentPosition: true
+                });
+            });
+        });
+    </script>
+}
